@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\PaymentMethodResource\Pages;
+use App\Filament\Resources\PaymentMethodResource\RelationManagers;
+use App\Models\PaymentMethod;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Table;
+use Filament\Tables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class PaymentMethodResource extends Resource
+{
+    protected static ?string $model = PaymentMethod::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Card::make()->schema([
+                    Forms\Components\TextInput::make('name')->required(),
+                    Forms\Components\Repeater::make('fields')->schema([
+                        Forms\Components\TextInput::make('field_label')->required(),
+                        Forms\Components\TextInput::make('field_name')->required(),
+                    ])->grid(2),
+                    Forms\Components\Toggle::make('status'),
+                ])
+            ]);
+    }
+    public static function canViewAny(): bool
+    {
+        return auth('stakeholder')->user()->hasRole('super-admin');
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\ToggleColumn::make('status'),
+                Tables\Columns\TagsColumn::make('fields')->getStateUsing(fn (Model $record) => array_column($record->fields, 'field_name'))
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+    
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+    
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListPaymentMethods::route('/'),
+            'create' => Pages\CreatePaymentMethod::route('/create'),
+            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
+        ];
+    }    
+}
