@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\GroupController;
+use App\Http\Controllers\Api\GroupProductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\Stripe_payment_controller;
+use App\Http\Controllers\Api\VoteController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,13 +29,13 @@ Route::namespace('App\Http\Controllers\Api')->group(function () {
             Route::post('request-verify-code-phone', 'VerificationController@sendVerifyPhone');
             Route::post('verify-phone', 'VerificationController@verifyPhone');
             Route::post('verify-email', 'VerificationController@verifyEmail');
-        //     Route::post('verify-landlord-request', 'VerificationController@verifyLandlord');
+            //     Route::post('verify-landlord-request', 'VerificationController@verifyLandlord');
             Route::post('logout', 'LoginController@logout');
         });
     });
 
     Route::controller('ProfileController')->middleware('auth:sanctum')->group(function () {
-Route::get('userprofile', 'userprofile');
+        Route::get('userprofile', 'userprofile');
     });
 
     // Product apis
@@ -50,7 +53,7 @@ Route::get('userprofile', 'userprofile');
     });
 
     // Cart apis
-    Route::controller('CartController')->middleware(['api'])->group(function(){
+    Route::controller('CartController')->middleware(['api'])->group(function () {
         Route::get('my-cart-list', 'myCart');
         Route::post('add-to-cart', 'addToCart');
         Route::post('remove-from-cart/{id}', 'removeCart');
@@ -65,24 +68,25 @@ Route::get('userprofile', 'userprofile');
 
 
     // Order apis
-    Route::controller('OrderController')->middleware(['api'])->group(function(){
+    Route::controller('OrderController')->middleware(['api'])->group(function () {
         Route::post('create-order', 'placeOrder');
         Route::get('my-orders', 'myOrders');
         // Route::get('order-detail/{orderId}', 'orderDetail');
     });
 
 
+
     // routes/api.php
-Route::get('/orders/{order}/status', function ($orderId) {
-    $order = Order::where('orderId', $orderId)->first();
+    Route::get('/orders/{order}/status', function ($orderId) {
+        $order = Order::where('orderId', $orderId)->first();
 
-    if (!$order) {
-        return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
-    }
+        if (!$order) {
+            return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
+        }
 
-    return response()->json(['status' => $order->status]);
-});
-    Route::controller('paypalcontroller')->middleware(['api'])->group(function(){
+        return response()->json(['status' => $order->status]);
+    });
+    Route::controller('paypalcontroller')->middleware(['api'])->group(function () {
         Route::post('paypal-payment', 'pypaltest');
         Route::post('paypal-card', 'cardPayment');
 
@@ -92,13 +96,12 @@ Route::get('/orders/{order}/status', function ($orderId) {
 
     // Shippment address
 
-    Route::controller('AddressController')->group(function(){
+    Route::controller('AddressController')->group(function () {
         Route::get('countries', 'countries');
         Route::get('country-cities/{countryId}', 'countryCities');
         Route::get('subcity/{cityId}', 'subcity');
-
     });
-    Route::controller('AddressController')->middleware('auth:sanctum')->group(function(){
+    Route::controller('AddressController')->middleware('auth:sanctum')->group(function () {
 
         Route::get('my-addresses', 'myAddress');
         Route::post('add-address', 'addNewAddress');
@@ -108,6 +111,13 @@ Route::get('/orders/{order}/status', function ($orderId) {
 
 
 Route::post('/create-payment-stripe', [Stripe_payment_controller::class, 'stripePayment']);
+Route::prefix('telegram')->group(function () {
 
+    Route::post('/groups', [GroupController::class, 'store']);
+    Route::get('/groups', [GroupController::class, 'index']);
+    Route::get('/groups/{id}', [GroupController::class, 'show']);
+    Route::get('/users/{telegramId}/groups', [GroupController::class, 'groupsByUser']);
+    Route::post('/groups/{group}/products', [GroupProductController::class, 'store']);
 
-
+    Route::post('/vote', [VoteController::class, 'store']);
+});
