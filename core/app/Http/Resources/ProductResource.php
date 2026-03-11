@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'description'      => $this->description,
             'main_category_id' => $this->mainCategory,
             'sub_category_id'  => $this->sub_category_id,
+            'product_type'    => $this->product_type,
             // 'main_category'    => new CategoryResource($this->mainCategory),
             // 'sub_category'     => new SubCategoryResource($this->subCategory),
             'discount'         => $this->discount,
