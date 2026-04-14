@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\GroupProductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\Stripe_payment_controller;
 use App\Http\Controllers\Api\VoteController;
+use App\Http\Controllers\OrderTgController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function () {
         Route::get('my-orders', 'myOrders');
         // Route::get('order-detail/{orderId}', 'orderDetail');
     });
+    Route::post('/api/orders/bespoke', [OrderTgController::class, 'store']);
 
 
 
