@@ -19,8 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173', 'http://192.168.0.156:5173', 'https://tsegudesign.com' ,'www.tsegudesign.com','http://localhost:3000'],
-
+     'allowed_origins' => ['http://localhost:5173', 'http://192.168.0.156:5173', 'https://tsegudesign.com' ,'www.tsegudesign.com','http://localhost:3000','https://admin.tsegudesign.com'],
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],

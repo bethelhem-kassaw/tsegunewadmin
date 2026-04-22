@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TelegramOrderResource\Pages;
 use App\Filament\Resources\TelegramOrderResource\RelationManagers;
-use App\Models\TelegramOrder;
+use App\Models\telegramOrder;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
