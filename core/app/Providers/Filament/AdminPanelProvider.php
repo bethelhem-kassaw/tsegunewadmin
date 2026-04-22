@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             login(\Filament\Pages\Auth\Login::class)->passwordReset()
             ->colors([
                 'primary' => '#bcc2b2',
-            ])->brandName('SENQ MEAL
+            ])->brandName('Tegu Design
 ')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

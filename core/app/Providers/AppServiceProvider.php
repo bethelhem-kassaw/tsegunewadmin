@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
         //     ]);
         // });
 
-        $menus = \App\Models\MainCategory::with('subCategory')->get();
-        View::share('menus', $menus);
+        // $menus = \App\Models\MainCategory::with('subCategory')->get();
+        // View::share('menus', $menus);
     }
 }
